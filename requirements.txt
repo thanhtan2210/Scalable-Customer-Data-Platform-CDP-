@@ -10,3 +10,12 @@ pyarrow
 xgboost
 joblib
 apache-airflow
+openpyxl
+pyspark
+pytest
+pytest-cov
+ruff
+flake8
+mypy
+black
+isort
