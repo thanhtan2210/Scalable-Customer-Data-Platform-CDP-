@@ -1,0 +1,34 @@
+version: '3.7'
+
+services:
+  # 1. MinIO (S3 Compatible Storage) - Thay thế lưu file local
+  minio:
+    image: minio/minio:latest
+    container_name: cdp_minio
+    ports:
+      - "9000:9000" # API Port
+      - "9001:9001" # Console Port
+    environment:
+      MINIO_ROOT_USER: admin
+      MINIO_ROOT_PASSWORD: password
+    command: server /data --console-address ":9001"
+    volumes:
+      - minio_data:/data
+
+  # 2. MLflow (Model Tracking)
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:v2.18.0
+    container_name: cdp_mlflow
+    ports:
+      - "5000:5000"
+    environment:
+      MLFLOW_BACKEND_STORE_URI: sqlite:///mlflow.db
+      MLFLOW_DEFAULT_ARTIFACT_ROOT: s3://mlflow/
+      AWS_ACCESS_KEY_ID: admin
+      AWS_SECRET_ACCESS_KEY: password
+    command: mlflow server --backend-store-uri sqlite:///mlflow.db --default-artifact-root s3://mlflow/ --host 0.0.0.0
+    depends_on:
+      - minio
+
+volumes:
+  minio_data:

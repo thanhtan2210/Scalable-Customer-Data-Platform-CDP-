@@ -3,34 +3,39 @@ import joblib
 import os
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import accuracy_score, classification_report
+from sklearn.metrics import accuracy_score
 
 # Setup đường dẫn
 BASE_DIR = os.path.dirname(os.path.dirname(
     os.path.dirname(os.path.abspath(__file__))))
 
-# SỬA Ở ĐÂY: Trỏ vào THƯ MỤC 'features' thay vì file cụ thể
-INPUT_PATH = os.path.join(BASE_DIR, 'data', 'processed', 'features')
+# Đường dẫn MinIO
+# LƯU Ý QUAN TRỌNG: Pandas dùng s3:// chứ không dùng s3a://
+INPUT_PATH = "s3://datalake/processed/features"
 MODEL_DIR = os.path.join(BASE_DIR, 'models')
 
 
 def train():
-    print("--- Starting Training Job ---")
+    print("--- Starting Training Job (MinIO Version) ---")
 
-    # Kiểm tra đường dẫn tồn tại chưa
-    if not os.path.exists(INPUT_PATH):
-        print(f"ERROR: Không tìm thấy thư mục data tại {INPUT_PATH}")
-        print("Hãy chạy 'python spark_jobs/clean_data_spark.py' trước.")
-        return
-
-    # 1. Load Data
-    # Pandas read_parquet có thể đọc cả folder chứa nhiều file parquet
+    # 1. Load Data trực tiếp từ MinIO
     try:
-        print(f"Reading data from folder: {INPUT_PATH}")
-        df = pd.read_parquet(INPUT_PATH)
+        print(f"🚀 Reading data from MinIO: {INPUT_PATH}")
+
+        # Pandas tự động dùng s3fs để đọc S3 thông qua storage_options
+        df = pd.read_parquet(
+            INPUT_PATH,
+            storage_options={
+                "key": "admin",
+                "secret": "password",
+                "client_kwargs": {"endpoint_url": "http://localhost:9000"}
+            }
+        )
         print(f"✅ Loaded {len(df)} rows.")
     except Exception as e:
-        print(f"❌ Lỗi đọc file Parquet: {e}")
+        print(f"❌ Lỗi đọc file từ MinIO: {e}")
+        print("💡 Gợi ý: Kiểm tra xem Docker MinIO có đang chạy không?")
+        print("💡 Gợi ý: Kiểm tra xem Spark Job đã ghi file vào 'datalake/processed/features' chưa?")
         return
 
     # 2. Prepare X, y
@@ -58,11 +63,11 @@ def train():
     acc = accuracy_score(y_test, y_pred)
     print(f"✅ Model Accuracy: {acc:.4f}")
 
-    # 6. Save Model
+    # 6. Save Model Local (Sau này có thể nâng cấp save lên MLflow)
     os.makedirs(MODEL_DIR, exist_ok=True)
     save_path = os.path.join(MODEL_DIR, 'churn_model.joblib')
     joblib.dump(model, save_path)
-    print(f"💾 Model saved to: {save_path}")
+    print(f"💾 Model saved locally to: {save_path}")
 
 
 if __name__ == "__main__":

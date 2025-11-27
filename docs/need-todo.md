@@ -36,7 +36,6 @@ Mục tiêu: xây dựng nền tảng xử lý dữ liệu khách hàng có kh�
 ### Spark Cleaning & Dedup Example (PySpark)
 - Example PySpark job: read, clean, deduplicate, write Parquet partitioned by date.
 ```python
-// filepath: d:\Bon Bon\SourceCode\AI-project\Customer_Churn_Prediction\spark_jobs\cdp_clean_dedup.py
 from pyspark.sql import SparkSession
 from pyspark.sql import functions as F
 from pyspark.sql.window import Window

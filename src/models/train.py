@@ -8,8 +8,7 @@ from sklearn.metrics import accuracy_score, classification_report
 # Đường dẫn
 BASE_DIR = os.path.dirname(os.path.dirname(
     os.path.dirname(os.path.abspath(__file__))))
-INPUT_PATH = os.path.join(BASE_DIR, 'data', 'processed',
-                          'features', 'customer_features.parquet')
+INPUT_PATH = "s3://datalake/processed/features"
 MODEL_DIR = os.path.join(BASE_DIR, 'models')
 
 

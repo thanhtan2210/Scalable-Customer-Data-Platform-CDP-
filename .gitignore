@@ -5,11 +5,9 @@ __pycache__/
 .pytest_cache/
 .ruff_cache/
 
-# Data (Không push dữ liệu)
-data/
-
-# Windows Binaries (QUAN TRỌNG)
+# Windows Binaries
 bin/
+data/
 hadoop_libs/
 *.exe
 *.dll

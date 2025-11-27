@@ -1,3 +1,4 @@
+pandera
 pandas 
 numpy 
 matplotlib 
@@ -19,3 +20,7 @@ flake8
 mypy
 black
 isort
+s3fs
+fsspec
+mlflow
+boto3
