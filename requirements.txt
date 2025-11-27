@@ -11,7 +11,7 @@ xgboost
 joblib
 apache-airflow
 openpyxl
-pyspark
+pyspark==3.4.1
 pytest
 pytest-cov
 ruff
