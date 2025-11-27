@@ -1,1 +1,20 @@
-bin
+# Python artifacts
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.ruff_cache/
+
+# Data (Không push dữ liệu)
+data/
+
+# Windows Binaries (QUAN TRỌNG)
+bin/
+hadoop_libs/
+*.exe
+*.dll
+*.log
+
+# IDE settings
+.vscode/
+.idea/
