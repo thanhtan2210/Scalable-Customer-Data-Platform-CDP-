@@ -1,6 +1,6 @@
 pandera
 pandas 
-numpy 
+numpy
 matplotlib 
 seaborn
 openpyxl
@@ -22,5 +22,5 @@ black
 isort
 s3fs
 fsspec
-mlflow
+mlflow==2.8.1
 boto3

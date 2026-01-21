@@ -45,7 +45,7 @@ def train():
     X = df.drop(columns=['customerID', 'Churn'])
     y = df['Churn']
     X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.2, random_state=42)
+        X, y, test_size=0.4, random_state=42)
 
     # 3. START MLFLOW RUN
     with mlflow.start_run():
@@ -53,7 +53,7 @@ def train():
 
         # A. Log Params
         n_estimators = 100
-        max_depth = 10
+        max_depth = 100
         mlflow.log_param("n_estimators", n_estimators)
         mlflow.log_param("max_depth", max_depth)
         mlflow.log_param("data_source", INPUT_PATH)
@@ -76,8 +76,7 @@ def train():
         # Dùng keyword arguments rõ ràng
         mlflow.sklearn.log_model(
             sk_model=model,
-            artifact_path="s3://mlflow/",
-            name="random_forest_model",
+            artifact_path="random_forest_model",
             registered_model_name="TelcoChurnModel"
         )
 

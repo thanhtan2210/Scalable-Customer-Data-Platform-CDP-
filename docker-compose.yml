@@ -17,7 +17,7 @@ services:
 
   # 2. MLflow (Model Tracking)
   mlflow:
-    image: ghcr.io/mlflow/mlflow:v2.18.0
+    image: ghcr.io/mlflow/mlflow:v2.8.1
     container_name: cdp_mlflow
     ports:
       - "5000:5000"
